@@ -20,5 +20,6 @@ class Database(object):
         for paste in json_data:
             try:
                 yield self.dump_paste(paste)
-            except IntegrityError:
+            except IntegrityError as e:
+                print(e)
                 self.db.session.rollback()
