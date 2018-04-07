@@ -9,7 +9,7 @@ from scrapebin.database import Database
 from scrapebin.pastebin import Pastebin
 
 
-def dump_pastes_to_disk(paste_iter, output_dir):
+def dump_pastes_to_disk(paste_iter, data_dir):
 
     def write_to_file(output_file, data):
         with open(output_file, 'w') as fout:
@@ -17,34 +17,34 @@ def dump_pastes_to_disk(paste_iter, output_dir):
 
     for paste_id, data in paste_iter:
         paste_meta = Paste.get(str(paste_id))
-        output_directory = os.path.join(output_dir, paste_meta.human_readable_date.strftime('%Y-%m-%d'))
-        output_file = os.path.join(output_directory, paste_id)
+        output_dir = os.path.join(data_dir, paste_meta.human_readable_date.strftime('%Y-%m-%d'))
+        output_file = os.path.join(output_dir, paste_id)
         try:
             write_to_file(output_file, data)
         except IOError:
-            os.makedirs(output_directory)
+            os.makedirs(output_dir)
             write_to_file(output_file, data)
 
 
 def keep_scraping(args):
     pastebin = Pastebin()
     database = Database()
-    try:
-        while True:
-            pastes = pastebin.scrape(limit=args.pastes_per_request)
-            database.dump_many(pastes)
-            paste_ids = [paste.get('id') for paste in pastes]
-            paste_iter = pastebin.fetch_many(paste_ids)
-            dump_pastes_to_disk(paste_iter, args.data_dir)
-            print('sleeping...')
-            time.sleep(args.sleep_duration)
-    except KeyboardInterrupt:
-        pass
+    while True:
+        pastes = pastebin.scrape(limit=args.pastes_per_request)
+        database.dump_many(pastes)
+        paste_ids = [paste.get('id') for paste in pastes]
+        paste_iter = pastebin.fetch_many(paste_ids)
+        dump_pastes_to_disk(paste_iter, args.data_dir)
+        print('sleeping...')
+        time.sleep(args.sleep_duration)
 
 
 def main(args):
     scrapebin.models.db.create_all()
-    keep_scraping(args)
+    try:
+        keep_scraping(args)
+    except KeyboardInterrupt:
+        pass
 
 
 if __name__ == '__main__':
