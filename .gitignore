@@ -1,0 +1,10 @@
+*.py[cod]
+*.swp
+.ropeproject*
+backups/
+!backups/.gitkeep
+data/
+!data/.gitkeep
+venv/
+_old_data/
+__pycache__
