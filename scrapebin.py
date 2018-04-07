@@ -32,7 +32,7 @@ def keep_scraping(args):
     while True:
         pastes = pastebin.scrape(limit=args.pastes_per_request)
         database.dump_many(pastes)
-        paste_ids = [paste.get('id') for paste in pastes]
+        paste_ids = [paste.get('key') for paste in pastes]
         paste_iter = pastebin.fetch_many(paste_ids)
         dump_pastes_to_disk(paste_iter, args.data_dir)
         print('sleeping...')
