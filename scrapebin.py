@@ -16,6 +16,7 @@ def dump_pastes_to_disk(paste_iter, data_dir):
             fout.write(data)
 
     for paste_id, data in paste_iter:
+        print(paste_id)
         paste_meta = Paste.get(str(paste_id))
         output_dir = os.path.join(data_dir, paste_meta.human_readable_date.strftime('%Y-%m-%d'))
         output_file = os.path.join(output_dir, paste_id)
