@@ -2,6 +2,7 @@ import os
 import time
 import argparse
 
+import scrapebin.models
 from scrapebin.models import Paste
 from scrapebin import constants
 from scrapebin.database import Database
