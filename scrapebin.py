@@ -36,7 +36,7 @@ def keep_scraping(args):
         paste_ids = [paste.get('key') for paste in pastes]
         paste_iter = pastebin.fetch_many(paste_ids)
         dump_pastes_to_disk(paste_iter, args.data_dir)
-        print('sleeping...')
+        print('\nsleeping...\n')
         time.sleep(args.sleep_duration)
 
 
