@@ -31,7 +31,15 @@ def keep_scraping(args):
     pastebin = Pastebin()
     database = Database()
     while True:
-        pastes = pastebin.scrape(limit=args.pastes_per_request)
+        while True:
+            try:
+                pastes = pastebin.scrape(limit=args.pastes_per_request)
+            except ValueError:
+                time.sleep(3)
+                pass
+            else:
+                break
+
         database.dump_many(pastes)
         paste_ids = [paste.get('key') for paste in pastes]
         paste_iter = pastebin.fetch_many(paste_ids)
