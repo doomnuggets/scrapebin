@@ -10,7 +10,7 @@ Paginator==0.5.1
 pg8000==1.10.2
 PyMySQL==0.6.6
 python-dateutil==2.7.2
-requests==2.18.4
+requests==2.20.0
 six==1.11.0
 SQLAlchemy==1.2.6
 SQLAlchemy-Utils==0.33.2
